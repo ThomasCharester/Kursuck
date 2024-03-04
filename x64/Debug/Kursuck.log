@@ -1,0 +1,21 @@
+﻿  main.cpp
+F:\Projects\Games\Kursuck\Choice.h(221,21): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "main.cpp")
+  F:\Projects\Games\Kursuck\Choice.h(221,21):
+  контекст создания экземпляра шаблона (сначала самый старый)
+  	F:\Projects\Games\Kursuck\Database.h(16,15):
+  	выполняется компиляция ссылки на экземпляр класс шаблон функции "UI<Database>"
+  	F:\Projects\Games\Kursuck\Choice.h(218,7):
+  	во время компиляции функции-члена класс шаблон "void UI<Database>::printInVerticalFrame(std::string *,std::string,int,int)"
+  		F:\Projects\Games\Kursuck\Choice.h(48,25):
+  		см. первую ссылку на "UI<Database>::printInVerticalFrame" в "UI<Database>::choose"
+  		F:\Projects\Games\Kursuck\main.cpp(17,2):
+  		см. первую ссылку на "UI<Database>::choose" в "main"
+  
+F:\Projects\Games\Kursuck\Choice.h(236,15): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "main.cpp")
+  
+F:\Projects\Games\Kursuck\Choice.h(239,15): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "main.cpp")
+  
+  Kursuck.vcxproj -> F:\Projects\Games\Kursuck\x64\Debug\Kursuck.exe
