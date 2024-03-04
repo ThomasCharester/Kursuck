@@ -2,9 +2,7 @@
 #ifndef DATABASE
 #define DATABASE
 
-#include <iostream>
 #include <fstream>
-#include <string>
 #include <vector>
 
 #include "Choice.h"
@@ -12,12 +10,24 @@
 
 class Database {
 public:
-	Database(UI<Database> & ui) {
+	Database(UI<Database>& ui) {
 		this->ui = &ui;
+
+		switch (readOrNew()) {
+		case 'Y':
+		case 'y':
+			readFile();
+			break;
+		case 'N':
+		case 'n':
+
+			break;
+		}
 	}
-	int readOrNew() {
-		std::cout << "\nWill you edit existing database or create new?\n" << "\t\t(Y/N)\n";
-		return 1;
+	char readOrNew() {
+		char ch = ui->input<char>("Will you edit existing database? (Y/N)");
+
+		return ch;
 	}
 	int addParticipant() {
 		std::string FIO = ui->input<std::string>("Participant FIO");
@@ -32,16 +42,21 @@ public:
 		return 1;
 	}
 	int removeParticipant() {
+		system("cls");
+		if(participants.empty()) return 1;
 		showParticipants();
 		int id = ui->input<int>("Participant to remove id");
 
 		participants.erase(participants.begin() + id);
 
+		ui->pressAnyButton();
 		return 1;
 	}
-	int showParticipants(){
+	int showParticipants() {
+		system("cls");
 		for (int i = 0; i < participants.size(); i++)
 			ui->print<std::string>(participants.at(i).print());
+		ui->pressAnyButton();
 		return 1;
 	}
 	int specialTask() {
@@ -52,14 +67,27 @@ public:
 
 		return 1;
 	}
+	int findLinear() {
+		system("cls");
+
+		int key = ui->input<int>("Enter key");
+
+		for (int i = 0; i < participants.size(); i++)
+			if ((int)participants.at(i) == key)
+				ui->print<std::string>(participants.at(i).print());
+
+		ui->pressAnyButton();
+		return 1;
+	}
 	void enterFileName() {
+		system("cls");
 		fileName = ui->input<std::string>("Text file name without .txt format");
 		fileName += ".txt";
 	}
 	int writeFile() {
 		//Создаём поток чтения файла
 		std::ofstream file;
-	
+
 		if (fileName.empty()) enterFileName();
 		//Открываем для чтения
 		file.open(fileName);
@@ -82,7 +110,7 @@ public:
 		//Проверка, указано ли имя файла, вынес в переменную
 		if (fileName.empty()) enterFileName();
 		//Создаём чтения потока
-		std::ifstream file; 
+		std::ifstream file;
 		//Открываем для чтения
 		file.open(fileName);
 		//Проверка на то, открыт ли файл
@@ -121,7 +149,7 @@ public:
 			file.close();
 		}
 		//Если файл не открыт, то ошибка
-		else std::cout << "Oshibka otkritiya fila"; 
+		else std::cout << "Oshibka otkritiya fila";
 
 		return 1;
 	}

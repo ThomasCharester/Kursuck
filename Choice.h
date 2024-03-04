@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include <string>
+#include <conio.h>
 
 template<typename T>
 class UI {
@@ -29,6 +30,11 @@ public:
 			this->choiceName = choiceName;
 		}
 	};
+	int pressAnyButton() {
+		std::cout << "\nPress any button ";
+		
+		return _getch();
+	}
 	int choose(Choice* choices, int choiceCount, std::string name, bool lethalExit = true) {
 
 		std::string* names = new std::string[choiceCount];
@@ -39,14 +45,13 @@ public:
 
 		exitValues state = exitValues::continueChoice;
 		while (state == exitValues::continueChoice) {
+			system("cls");
 
 			std::string name2 = "Choose " + name;
 
-			if (choiceCount < 6)
-				printInFrame(names, name2, choiceCount, 1);
-			else
-				printInVerticalFrame(names, name2, choiceCount, 2);
-			int input = inputInRange<int>("Your choice", choiceCount, 0);
+			printInFrame(names, name2, choiceCount, 1);
+
+			int input = inputInstant("Your choice", 48 + choiceCount);
 
 			if (input) {
 				state = static_cast<UI<T>::exitValues>(((choices[input - 1].funcOwner)->*(choices[input - 1].func))());
@@ -73,93 +78,22 @@ public:
 			}
 		}
 	}
-	template<typename T1>
-	T1 inputLessThan(std::string text, T1 less) {
-		T1 input;
+	int inputInstant(std::string text, int less = 57, int bigger = 48) {
+		int input;
 		while (true) {
 			std::cout << '\n' << text << " : ";
-			std::cin >> input;
-			if (std::cin.fail() || input > less) {
+			input = _getch();
+			if ((input > less || input < bigger)) {
 				std::cout << "WRONG INPUT!!!";
 				std::cin.clear();
-				std::cin.ignore();
 			}
 			else {
-				return input;
+				return input - 48;
 			}
 		}
-	}
-	template<typename T1>
-	T1 inputInRange(std::string text, T1 less, T1 bigger) {
-		T1 input;
-		while (true) {
-			std::cout << '\n' << text << " : ";
-			std::cin >> input;
-			if (std::cin.fail() || input > less || input < bigger) {
-				std::cout << "WRONG INPUT!!!";
-				std::cin.clear();
-				std::cin.ignore();
-			}
-			else {
-				return input;
-			}
-		}
-	}
-	void printInFrame(std::string* strings, int stringCount, int padding)
-	{
-		//system("cls");
-		padding++;
-		int width = 10 + padding * 2;
-		for (size_t i = 0; i < stringCount; i++)
-			width += (int)(strings[i].length()) + 5;
-		std::cout << '\n';
-		for (int i = 0; i < width; i++)
-			std::cout << '#';
-
-		for (int i = padding - 1; i > 0; i--)
-		{
-			std::cout << '\n';
-			std::cout << '#';
-			for (int j = 0; j < width - 2; j++)
-				std::cout << ' ';
-			std::cout << '#';
-		}
-
-		std::cout << '\n'
-			<< '#';
-
-		for (int i = padding; i > 0; i--)
-			std::cout << ' ';
-
-		std::cout << "Exit - 0";
-
-		for (size_t i = 0; i < stringCount; i++)
-			std::cout << ' ' << strings[i] << " - " << i + 1;
-
-		for (int i = padding; i > 0; i--)
-			std::cout << ' ';
-
-		std::cout << '#';
-
-		for (int i = padding - 1; i > 0; i--)
-		{
-			std::cout << '\n';
-			std::cout << '#';
-			for (int j = 0; j < width - 2; j++)
-				std::cout << ' ';
-			std::cout << '#';
-		}
-
-		std::cout << '\n';
-
-		for (int i = 0; i < width; i++)
-			std::cout << '#';
-
-		std::cout << '\n';
 	}
 	void printInFrame(std::string* strings, std::string name, int stringCount, int padding)
 	{
-		//system("cls");
 		padding++;
 		int width = 10 + padding * 2;
 		for (size_t i = 0; i < stringCount; i++)
@@ -215,42 +149,9 @@ public:
 		std::cout << '\n';
 	}
 
-	void printInVerticalFrame(std::string* strings, std::string name, int stringCount, int padding = 2)
-	{
-		//system("cls");
-		int maxStringSize = (strings[0].length());
-		for (size_t i = 0; i < stringCount; i++)
-			maxStringSize = (maxStringSize < (int)(strings[i].length())) ? (int)(strings[i].length()) : maxStringSize;
-
-
-		int width = maxStringSize + padding * 2;
-
-		for (int i = 0; i < width; i++)
-			std::cout << '#';
-		
-		std::cout << '\n';
-
-		for (size_t i = 0; i < stringCount; i++)
-		{
-			std::cout << '#';
-			for (int k = padding + (maxStringSize- strings[i].length())/2; k > 0; k--)
-				std::cout << ' ';
-			std::cout << strings[i];
-			for (int k = padding + (maxStringSize - strings[i].length()) / 2; k > 0; k--)
-				std::cout << ' ';
-			std::cout << '#';
-			std::cout << '\n';
-		}
-		for (int i = 0; i < width; i++)
-			std::cout << '#';
-
-		std::cout << '\n';
-
-	}
 	template <typename T1>
 	void print(T1 data) {
 		std::cout << '\n' << data;
 	}
-private:
 };
 #endif
