@@ -18,15 +18,15 @@
     <ClCompile Include="main.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Database.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Choice.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="Participant.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="Database.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
