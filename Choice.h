@@ -47,7 +47,7 @@ public:
 		while (state == exitValues::continueChoice) {
 			system("cls");
 
-			std::string name2 = "Choose " + name;
+			std::string name2 = name;
 
 			printInFrame(names, name2, choiceCount, 1);
 
@@ -116,8 +116,7 @@ public:
 			std::cout << '#';
 		}
 
-		std::cout << '\n'
-			<< '#';
+		std::cout << "\n#";
 
 		for (int i = padding; i > 0; i--)
 			std::cout << ' ';

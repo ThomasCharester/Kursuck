@@ -1,0 +1,8 @@
+﻿  main.cpp
+A:\Projects\Kursuck\Database.h(133,36): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "main.cpp")
+  
+A:\Projects\Kursuck\Database.h(173,11): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "main.cpp")
+  
+  Kursuck.vcxproj -> A:\Projects\Kursuck\x64\Debug\Kursuck.exe

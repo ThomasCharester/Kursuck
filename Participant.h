@@ -42,6 +42,10 @@ public:
 	{
 		return age;
 	}
+	inline operator std::string() const
+	{
+		return teamName;
+	}
 
 	inline friend std::ostream& operator<<(std::ostream& os, const Participant& participant);
 };

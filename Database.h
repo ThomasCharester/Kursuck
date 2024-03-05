@@ -4,7 +4,7 @@
 
 #include <fstream>
 #include <vector>
-
+#include <tuple>
 #include "Choice.h"
 #include "Participant.h"
 
@@ -28,6 +28,34 @@ public:
 		char ch = ui->input<char>("Will you edit existing database? (Y/N)");
 
 		return ch;
+	}
+	int editDatabase() {
+
+
+		UI<Database>::Choice taskChoices[2]{
+			UI<Database>::Choice(this, &Database::addParticipant, "Add participant"),
+			UI<Database>::Choice(this, &Database::removeParticipant, "Remove participant")
+		};
+
+		return ui->choose(taskChoices, 2, "Choose option", false);
+	}
+	int search() {
+
+		UI<Database>::Choice taskChoices[2]{
+			UI<Database>::Choice(this,&Database::findLinear,"Find linear"),
+			UI<Database>::Choice(this,&Database::findBinary,"Find binary")
+		};
+
+		return ui->choose(taskChoices, 2, "Choose type of sort", false);
+	}
+	int file() {
+		UI<Database>::Choice taskChoices[3]{
+			UI<Database>::Choice(this,&Database::writeFile,"Rewrite file"),
+			UI<Database>::Choice(this,&Database::addFromFile,"Add from file"),
+			UI<Database>::Choice(this,&Database::readFile,"Read file")
+		};
+
+		return ui->choose(taskChoices, 3, "File", false);
 	}
 	int addParticipant() {
 		std::string FIO = ui->input<std::string>("Participant FIO");
@@ -61,7 +89,44 @@ public:
 		return 1;
 	}
 	int specialTask() {
-
+		std::vector<std::tuple<std::string, int, int>> teams;
+		for (int i = 0; i < participants.size(); i++) {
+			bool found = false;
+			for (int j = 0; j < teams.size() && !found; j++) {
+				if (std::string(*participants.at(i)) == std::get<0>(teams.at(j))) {
+					int k = int(*participants.at(i));
+					std::get<1>(teams.at(j)) = (std::get<1>(teams.at(j)) * std::get<2>(teams.at(j)) + int(*participants.at(i)));
+					std::get<2>(teams.at(j))++;
+					std::get<1>(teams.at(j)) /= std::get<2>(teams.at(j));
+					found = true;
+				}
+			}
+			if (!found || teams.empty()) {
+				teams.push_back(std::make_tuple<std::string, int, int>(std::string(*participants.at(i)), int(*participants.at(i)), 1));
+			}
+		}
+		for (int j = 0; j < teams.size() - 1; j++) {
+			if (std::get<1>(teams.at(j + 1)) > std::get<1>(teams.at(j))) {
+				teams.erase(teams.begin() + j + 1);
+				j--;
+			}
+			else if (std::get<1>(teams.at(j + 1)) < std::get<1>(teams.at(j))) {
+				for (int i = j; i > 0; i--) {
+					teams.erase(teams.begin() + i);
+					j = 0;
+				}
+			}
+		}
+		system("cls");
+		ui->print<std::string>("Youngest teams is: ");
+		for (size_t j = 0; j < teams.size(); j++) {
+			ui->print<std::string>(std::get<0>(teams.at(j)));
+			for (size_t i = 0; i < participants.size(); i++) {
+				if (std::string(*participants.at(i)) == std::get<0>(teams.at(j)))ui->print<std::string>(participants.at(i)->print());
+			}
+			std::cout << '\n';
+		}
+		ui->pressAnyButton();
 		return 1;
 	}
 	int sort() {
@@ -87,15 +152,6 @@ public:
 		} while (f < l);
 		if (first < l) quicksort(first, l);
 		if (f < last) quicksort(f, last);
-	}
-	int search() {
-
-		UI<Database>::Choice taskChoices[2]{
-			UI<Database>::Choice(this,&Database::findLinear,"Find linear"),
-			UI<Database>::Choice(this,&Database::findBinary,"Find binary")
-		};
-
-		return ui->choose(taskChoices, 2, "Choose type of sort", false);
 	}
 	int findLinear() {
 		system("cls");
@@ -144,24 +200,16 @@ public:
 		ui->pressAnyButton();
 		return 2;
 	}
-	int file() {
-		UI<Database>::Choice taskChoices[2]{
-			UI<Database>::Choice(this,&Database::readFile,"Read file"),
-			UI<Database>::Choice(this,&Database::writeFile,"Write file")
-		};
-
-		return ui->choose(taskChoices, 2, "File", false);
-	}
-	void enterFileName() {
+	void enterFileName(std::string & fileName) {
 		system("cls");
-		fileName = ui->input<std::string>("Text file name without .txt format");
-		fileName += ".txt";
+		fileName = ui->input<std::string>("Text file name without .format");
+		fileName += ".db";
 	}
 	int writeFile() {
 		//Создаём поток чтения файла
 		std::ofstream file;
 
-		if (fileName.empty()) enterFileName();
+		if (fileName.empty()) enterFileName(fileName);
 		//Открываем для чтения
 		file.open(fileName);
 		//Проверка на то, открыт ли файл
@@ -181,7 +229,58 @@ public:
 		//Строчка файла
 		std::string line;
 		//Проверка, указано ли имя файла, вынес в переменную
-		if (fileName.empty()) enterFileName();
+		if (fileName.empty()) enterFileName(fileName);
+		//Создаём чтения потока
+		std::ifstream file;
+		//Открываем для чтения
+		file.open(fileName);
+		//Проверка на то, открыт ли файл
+		if (file.is_open()) {
+			//Читаем из файла, пока не конец строки
+			while (!file.eof()) {
+				//Читаем строку
+				std::getline(file, line);
+				//Число переменных класса Participant, у меня их 4
+				int dataCount = 7;
+				//Массив из строк данных
+				std::string data[7];
+				//Смотрим не конец ли это файла, если что - разрываем
+				if (line.empty())
+					break;
+				//Записываем в базу данных слова, размещённые через пробелы
+				for (int i = 0; dataCount > 0; i++) {
+					//Проверяем на пробельный символ и уменьшаем количество оставшихся переменных для записи
+					if (line[i] == ' ')
+						dataCount--;
+					//Добавляем в строку по символу
+					else
+						data[dataCount - 1] += line[i];
+				}
+				participants.clear();
+				//Создаём Participant, которому указываем параметрами характеристики прочитанные из файла
+				participants.push_back(new Participant(Participant(
+					data[5],
+					data[4],
+					data[3],
+					std::stof(data[2]),
+					std::stof(data[1]),
+					std::stoi(data[6]),
+					std::stoi(data[0]))));
+			}
+			//закрываем файл
+			file.close();
+		}
+		//Если файл не открыт, то ошибка
+		else std::cout << "Oshibka otkritiya fila";
+
+		return 2;
+	}
+	int addFromFile() {
+		//Строчка файла
+		std::string line;
+		//Проверка, указано ли имя файла, вынес в переменную
+		std::string fileName;
+		enterFileName(fileName);
 		//Создаём чтения потока
 		std::ifstream file;
 		//Открываем для чтения
