@@ -7,8 +7,9 @@ int main() {
 
 	Database* labs = new Database(ui);
 
-	UI<Database>::Choice taskChoices[6]{
+	UI<Database>::Choice taskChoices[7]{
 		UI<Database>::Choice(labs,&Database::showParticipants,"Show participants"),
+		UI<Database>::Choice(labs,&Database::showTeams,"Show teams"),
 		UI<Database>::Choice(labs,&Database::editDatabase,"Edit database"),
 		UI<Database>::Choice(labs,&Database::file,"File"),
 		UI<Database>::Choice(labs,&Database::search,"Search"),
@@ -16,7 +17,7 @@ int main() {
 		UI<Database>::Choice(labs,&Database::sort,"Sort")
 	};
 
-	return ui.choose(taskChoices, 6, "Choose action");
+	return ui.choose(taskChoices, 7, "Choose action");
 
 	return 0;
 }

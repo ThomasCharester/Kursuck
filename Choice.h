@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <conio.h>
-
+#include "windows.h"
 template<typename T>
 class UI {
 public:
@@ -14,6 +14,15 @@ public:
 		continueChoice = 1,
 		exitAndContinueChoice = 2,
 		shutdown = 3
+	};
+	enum colors : int {
+		White,
+		Red,
+		Blue,
+		Green,
+		Orange,
+		Pink,
+		Yellow
 	};
 	struct Choice {
 		T* funcOwner;
@@ -32,7 +41,7 @@ public:
 	};
 	int pressAnyButton() {
 		std::cout << "\nPress any button ";
-		
+
 		return _getch();
 	}
 	int choose(Choice* choices, int choiceCount, std::string name, bool lethalExit = true) {
@@ -51,7 +60,7 @@ public:
 
 			printInFrame(names, name2, choiceCount, 1);
 
-			int input = inputInstant("Your choice", 48 + choiceCount);
+			int input = inputInstant("Your choice",true, 48 + choiceCount) - 48;
 
 			if (input) {
 				state = static_cast<UI<T>::exitValues>(((choices[input - 1].funcOwner)->*(choices[input - 1].func))());
@@ -63,13 +72,13 @@ public:
 		return state;
 	}
 	template<typename T1>
-	T1 input(std::string text) {
+	T1 input(std::string text, bool newLine = true) {
 		T1 input;
 		while (true) {
-			std::cout << '\n' << text << " : ";
+			printMinecraft(text + " : ", newLine);
 			std::cin >> input;
 			if (std::cin.fail()) {
-				std::cout << "WRONG INPUT!!!";
+				printMinecraft("&1WRONG INPUT!!!");
 				std::cin.clear();
 				std::cin.ignore();
 			}
@@ -78,17 +87,17 @@ public:
 			}
 		}
 	}
-	int inputInstant(std::string text, int less = 57, int bigger = 48) {
+	int inputInstant(std::string text,bool newLine = true, int less = 57, int bigger = 48) {
 		int input;
 		while (true) {
-			std::cout << '\n' << text << " : ";
+			printMinecraft(text + " : ",newLine);
 			input = _getch();
 			if ((input > less || input < bigger)) {
-				std::cout << "WRONG INPUT!!!";
+				printMinecraft("&1WRONG INPUT!!!");
 				std::cin.clear();
 			}
 			else {
-				return input - 48;
+				return input;
 			}
 		}
 	}
@@ -149,8 +158,50 @@ public:
 	}
 
 	template <typename T1>
-	void print(T1 data) {
-		std::cout << '\n' << data;
+	void print(T1 data, bool newLine = true) {
+		if (newLine) std::cout << '\n';
+		std::cout << data;
+	}
+	void setColor(UI::colors color) {
+		HANDLE handle = GetStdHandle(STD_OUTPUT_HANDLE);
+		switch (color) {
+		case UI::colors::Red:
+			SetConsoleTextAttribute(handle, 12);
+			break;
+		case UI::colors::Green:
+			SetConsoleTextAttribute(handle, 10);
+			break;
+		case UI::colors::Blue:
+			SetConsoleTextAttribute(handle, 9);
+			break;
+		case UI::colors::Yellow:
+			SetConsoleTextAttribute(handle, 14);
+			break;
+		case UI::colors::Orange:
+			SetConsoleTextAttribute(handle, 6);
+			break;
+		case UI::colors::Pink:
+			SetConsoleTextAttribute(handle, 13);
+			break;
+		default:
+			SetConsoleTextAttribute(handle, 7);
+			break;
+		}
+	}
+	void printMinecraft(std::string str, bool newLine = true) {
+		if (newLine) std::cout << '\n';
+		bool flag = false;
+		for (char ch : str) {
+			if (!flag)
+				if (ch != '&')
+					std::cout << ch;
+				else flag = true;
+			else {
+				setColor(static_cast<UI::colors>((ch - 48)));
+				flag = false;
+			}
+		}
+		setColor(White);
 	}
 };
 #endif

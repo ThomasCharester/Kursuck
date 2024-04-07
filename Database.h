@@ -25,13 +25,12 @@ public:
 		}
 	}
 	char readOrNew() {
-		char ch = ui->input<char>("Will you edit existing database? (Y/N)");
+		ui->printMinecraft("&1Will &4you &2edit &5existing &6database? &0(&2Y&0/&3N&0) ");
+		char ch = (char)(ui->inputInstant("", false, 122, 65));
 
 		return ch;
 	}
 	int editDatabase() {
-
-
 		UI<Database>::Choice taskChoices[2]{
 			UI<Database>::Choice(this, &Database::addParticipant, "Add participant"),
 			UI<Database>::Choice(this, &Database::removeParticipant, "Remove participant")
@@ -40,7 +39,6 @@ public:
 		return ui->choose(taskChoices, 2, "Choose option", false);
 	}
 	int search() {
-
 		UI<Database>::Choice taskChoices[2]{
 			UI<Database>::Choice(this,&Database::findLinear,"Find linear"),
 			UI<Database>::Choice(this,&Database::findBinary,"Find binary")
@@ -58,54 +56,87 @@ public:
 		return ui->choose(taskChoices, 3, "File", false);
 	}
 	int addParticipant() {
-		std::string FIO = ui->input<std::string>("Participant FIO");
-		int playerID = ui->input<int>("Participant player ID");
-		std::string teamName = ui->input<std::string>("Participant team name");
-		std::string country = ui->input<std::string>("Participant country");
-		int age = ui->input<int>("Participant age");
-		float weight = ui->input<float>("Participant wieght");
-		float height = ui->input<float>("Participant height");
+		std::string FIO = ui->input<std::string>("Participant &2FIO");
+		int playerID = ui->input<int>("Participant &2player ID");
+		std::string teamName = ui->input<std::string>("Participant &2team name");
+		std::string country = ui->input<std::string>("Participant &2country");
+		int age = ui->input<int>("Participant &2age");
+		float weight = ui->input<float>("Participant &2weight");
+		float height = ui->input<float>("Participant &2height");
 
 		participants.push_back(new Participant(FIO, country, teamName, weight, height, playerID, age));
+
+		addTeamMember(participants.size() - 1);
+
 		return 1;
+	}
+	void addTeamMember(int i) {
+		bool found = false;
+		for (int j = 0; j < teams.size() && !found; j++) {
+			if (std::string(*participants.at(i)) == std::get<0>(teams.at(j))) {
+				std::get<1>(teams.at(j)) = (std::get<1>(teams.at(j)) * std::get<2>(teams.at(j)) + int(*participants.at(i)));
+				std::get<2>(teams.at(j))++;
+				std::get<1>(teams.at(j)) /= std::get<2>(teams.at(j));
+				found = true;
+			}
+		}
+		if (!found || teams.empty()) {
+			teams.push_back(std::make_tuple<std::string, int, int>(std::string(*participants.at(i)), int(*participants.at(i)), 1));
+		}
+	}
+	void removeTeamMember(int i) {
+		for (int j = 0; j < teams.size(); j++) {
+			if (std::string(*participants.at(i)) == std::get<0>(teams.at(j))) {
+				std::get<1>(teams.at(j)) = (std::get<1>(teams.at(j)) * std::get<2>(teams.at(j)) - int(*participants.at(i)));
+				std::get<2>(teams.at(j))--;
+				std::get<1>(teams.at(j)) /= std::get<2>(teams.at(j));
+			}
+		}
 	}
 	int removeParticipant() {
 		system("cls");
-		if (participants.empty()) return 1;
-		showParticipants();
-		int id = ui->input<int>("Participant to remove id");
-
-		participants.erase(participants.begin() + id);
-
+		if (participants.empty()) ui->printMinecraft("&1Nothing to delete ");
+		else {
+			showParticipants();
+			int id = ui->input<int>("Participant to &1remove &0id");
+			removeTeamMember(id);
+			participants.erase(participants.begin() + id);
+		}
+		ui->pressAnyButton();
+		return 1;
+	}
+	int showTeams() {
+		system("cls");
+		if (teams.empty()) ui->printMinecraft("&1Nothing to output ");
+		else {
+			ui->printMinecraft("&3Teams: ");
+			for (size_t j = 0; j < teams.size(); j++) {
+				ui->print<std::string>(std::get<0>(teams.at(j)));
+				for (size_t i = 0; i < participants.size(); i++) {
+					if (std::string(*participants.at(i)) == std::get<0>(teams.at(j)))ui->print<std::string>(participants.at(i)->print());
+				}
+				std::cout << '\n';
+			}
+		}
 		ui->pressAnyButton();
 		return 1;
 	}
 	int showParticipants() {
 		system("cls");
-		for (int i = 0; i < participants.size(); i++) {
-			ui->print<std::string>(participants.at(i)->print());
+		if (participants.empty()) ui->printMinecraft("&1Nothing to output ");
+		else {
+			for (int i = 0; i < participants.size(); i++) {
+				ui->print<std::string>(participants.at(i)->print());
+			}
 		}
 		ui->pressAnyButton();
 		return 1;
 	}
 	int specialTask() {
-		std::vector<std::tuple<std::string, int, int>> teams;
-		for (int i = 0; i < participants.size(); i++) {
-			bool found = false;
-			for (int j = 0; j < teams.size() && !found; j++) {
-				if (std::string(*participants.at(i)) == std::get<0>(teams.at(j))) {
-					int k = int(*participants.at(i));
-					std::get<1>(teams.at(j)) = (std::get<1>(teams.at(j)) * std::get<2>(teams.at(j)) + int(*participants.at(i)));
-					std::get<2>(teams.at(j))++;
-					std::get<1>(teams.at(j)) /= std::get<2>(teams.at(j));
-					found = true;
-				}
-			}
-			if (!found || teams.empty()) {
-				teams.push_back(std::make_tuple<std::string, int, int>(std::string(*participants.at(i)), int(*participants.at(i)), 1));
-			}
-		}
-		for (int j = 0; j < teams.size() - 1; j++) {
+		// Имя команды/Возраст общий/Кол-во участников
+		std::vector<std::tuple<std::string, int, int>> teams = this->teams;
+
+		for (size_t j = 0; j < teams.size() - 1; j++) {
 			if (std::get<1>(teams.at(j + 1)) > std::get<1>(teams.at(j))) {
 				teams.erase(teams.begin() + j + 1);
 				j--;
@@ -118,7 +149,7 @@ public:
 			}
 		}
 		system("cls");
-		ui->print<std::string>("Youngest teams is: ");
+		ui->printMinecraft("&3Youngest &0teams is: ");
 		for (size_t j = 0; j < teams.size(); j++) {
 			ui->print<std::string>(std::get<0>(teams.at(j)));
 			for (size_t i = 0; i < participants.size(); i++) {
@@ -130,6 +161,20 @@ public:
 		return 1;
 	}
 	int sort() {
+		if (teams.empty()) ui->printMinecraft("&1Nothing to sort ");
+		else {
+			UI<Database>::Choice taskChoices[4]{
+				UI<Database>::Choice(this,&Database::quickSort,"Quick"),
+				UI<Database>::Choice(this,&Database::shellSort,"Shell"),
+				UI<Database>::Choice(this,&Database::pigeonholeSort,"Pigeonhole"),
+				UI<Database>::Choice(this,&Database::bubbleSort,"Bubble")
+			};
+
+			return ui->choose(taskChoices, 4, "Sort", false);
+		}
+		return 1;
+	}
+	int quickSort() {
 		quicksort(0, participants.size() - 1);
 		return 1;
 	}
@@ -141,7 +186,7 @@ public:
 		{
 			while (*participants[f] < *mid) f++;
 			while (*participants[l] > *mid) l--;
-			if (f <= l) //перестановка элементов
+			if (f <= l) 
 			{
 				count = participants[f];
 				participants[f] = participants[l];
@@ -153,15 +198,71 @@ public:
 		if (first < l) quicksort(first, l);
 		if (f < last) quicksort(f, last);
 	}
+	int shellSort() {
+		int i, j, step;
+		Participant* tmp;
+		for (step = participants.size() / 2; step > 0; step /= 2)
+			for (i = step; i < participants.size(); i++)
+			{
+				tmp = participants[i];
+				for (j = i; j >= step; j -= step)
+				{
+					if (*tmp < *participants[j - step])
+						participants[j] = participants[j - step];
+					else
+						break;
+				}
+				participants[j] = tmp;
+			}
+		return 1;
+	}
+	int pigeonholeSort() {
+		Participant* min = participants[0], * max = participants[0];
+		for (int i = 1; i < participants.size(); i++) {
+			if (*participants[i] < *min)
+				min = participants[i];
+			if (*participants[i] > *max)
+				max = participants[i];
+		}
+		int range = (int)(*max) - (int)(*min) + 1;
+
+		std::vector<Participant*>* holes = new std::vector<Participant*>[range];
+
+		for (int i = 0; i < participants.size(); i++)
+			holes[(int)(*participants[i]) - (int)(*min)].push_back(participants[i]);
+
+		int index = 0;
+		for (int i = 0; i < range; i++) {
+			std::vector<Participant*>::iterator it;
+			for (it = holes[i].begin(); it != holes[i].end(); ++it)
+				participants[index++] = *it;
+		}
+		return 1;
+	}
+	int bubbleSort() {
+		for (int step = 0; step < participants.size(); ++step) {
+			for (int i = 0; i < participants.size() - step - 1; i++) {
+				if (*participants[i] > *participants[i + 1]) {
+					Participant* temp = participants[i];
+					participants[i] = participants[i + 1];
+					participants[i + 1] = temp;
+				}
+			}
+		}
+		return 1;
+	}
 	int findLinear() {
 		system("cls");
 
 		int key = ui->input<int>("Enter key");
-
+		bool found = false;
 		for (int i = 0; i < participants.size(); i++)
 			if (int(*participants.at(i)) == key)
+			{
+				found = true;
 				ui->print<std::string>(participants.at(i)->print());
-
+			}
+		if (!found)ui->printMinecraft("&1Not found");
 		ui->pressAnyButton();
 		return 2;
 	}
@@ -170,7 +271,7 @@ public:
 
 		int key = ui->input<int>("Enter key");
 
-		int mid = (participants.size() - 1) / 2, dist;
+		size_t mid = (participants.size() - 1) / 2, dist;
 		bool found = false;
 		while (!found) {
 			dist = (mid) / 2;
@@ -195,69 +296,54 @@ public:
 			}
 		}
 		else
-			ui->print<std::string>("Not found");
+			ui->printMinecraft("&1Not Found");
 
 		ui->pressAnyButton();
 		return 2;
 	}
-	void enterFileName(std::string & fileName) {
+	void enterFileName(std::string& fileName) {
 		system("cls");
-		fileName = ui->input<std::string>("Text file name without .format");
-		fileName += ".db";
+		fileName = ui->input<std::string>("Text file name without .format, then press enter");
+		fileName += ".ednach";
 	}
 	int writeFile() {
-		//Создаём поток чтения файла
 		std::ofstream file;
 
 		if (fileName.empty()) enterFileName(fileName);
-		//Открываем для чтения
 		file.open(fileName);
-		//Проверка на то, открыт ли файл
 		if (file.is_open()) {
-			//Записываем все данные о Box-ах в файл, функция printBox() - вернёт строку со всеми данными
 			for (int i = 0; i < participants.size(); i++) {
 				file << *participants.at(i) << '\n';
 			}
-			//закрываем файл
 			file.close();
 		}
-		//Если файл не открыт, то ошибка
-		else std::cout << "Oshibka otkritiya fila";
+		else ui->printMinecraft("&1File open error");
 		return 2;
 	}
-	int readFile() {
-		//Строчка файла
+	int readFile(bool extendedFile) {
 		std::string line;
-		//Проверка, указано ли имя файла, вынес в переменную
-		if (fileName.empty()) enterFileName(fileName);
-		//Создаём чтения потока
+		if (extendedFile)
+		{
+			participants.clear();
+			std::string fileName;
+			enterFileName(fileName);
+		}
+		else if (fileName.empty()) enterFileName(fileName);
 		std::ifstream file;
-		//Открываем для чтения
 		file.open(fileName);
-		//Проверка на то, открыт ли файл
 		if (file.is_open()) {
-			//Читаем из файла, пока не конец строки
 			while (!file.eof()) {
-				//Читаем строку
 				std::getline(file, line);
-				//Число переменных класса Participant, у меня их 4
 				int dataCount = 7;
-				//Массив из строк данных
 				std::string data[7];
-				//Смотрим не конец ли это файла, если что - разрываем
 				if (line.empty())
 					break;
-				//Записываем в базу данных слова, размещённые через пробелы
 				for (int i = 0; dataCount > 0; i++) {
-					//Проверяем на пробельный символ и уменьшаем количество оставшихся переменных для записи
 					if (line[i] == ' ')
 						dataCount--;
-					//Добавляем в строку по символу
 					else
 						data[dataCount - 1] += line[i];
 				}
-				participants.clear();
-				//Создаём Participant, которому указываем параметрами характеристики прочитанные из файла
 				participants.push_back(new Participant(Participant(
 					data[5],
 					data[4],
@@ -266,69 +352,23 @@ public:
 					std::stof(data[1]),
 					std::stoi(data[6]),
 					std::stoi(data[0]))));
+
+				addTeamMember(participants.size() - 1);
 			}
-			//закрываем файл
 			file.close();
 		}
-		//Если файл не открыт, то ошибка
-		else std::cout << "Oshibka otkritiya fila";
+		else ui->printMinecraft("&1File open error");
 
 		return 2;
 	}
-	int addFromFile() {
-		//Строчка файла
-		std::string line;
-		//Проверка, указано ли имя файла, вынес в переменную
-		std::string fileName;
-		enterFileName(fileName);
-		//Создаём чтения потока
-		std::ifstream file;
-		//Открываем для чтения
-		file.open(fileName);
-		//Проверка на то, открыт ли файл
-		if (file.is_open()) {
-			//Читаем из файла, пока не конец строки
-			while (!file.eof()) {
-				//Читаем строку
-				std::getline(file, line);
-				//Число переменных класса Participant, у меня их 4
-				int dataCount = 7;
-				//Массив из строк данных
-				std::string data[7];
-				//Смотрим не конец ли это файла, если что - разрываем
-				if (line.empty())
-					break;
-				//Записываем в базу данных слова, размещённые через пробелы
-				for (int i = 0; dataCount > 0; i++) {
-					//Проверяем на пробельный символ и уменьшаем количество оставшихся переменных для записи
-					if (line[i] == ' ')
-						dataCount--;
-					//Добавляем в строку по символу
-					else
-						data[dataCount - 1] += line[i];
-				}
-				//Создаём Participant, которому указываем параметрами характеристики прочитанные из файла
-				participants.push_back(new Participant(Participant(
-					data[5],
-					data[4],
-					data[3],
-					std::stof(data[2]),
-					std::stof(data[1]),
-					std::stoi(data[6]),
-					std::stoi(data[0]))));
-			}
-			//закрываем файл
-			file.close();
-		}
-		//Если файл не открыт, то ошибка
-		else std::cout << "Oshibka otkritiya fila";
-
-		return 2;
-	}
+	int readFile() { return readFile(false); }
+	int addFromFile() { return readFile(true); }
 private:
 	std::string fileName;
 	std::vector<Participant*> participants;
 	UI<Database>* ui;
+	// Содержит информацию о командах в порядке Имя команды/Возраст общий/Кол-во участников
+	std::vector<std::tuple<std::string, int, int>> teams;
 };
 
 
