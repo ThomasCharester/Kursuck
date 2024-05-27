@@ -221,8 +221,7 @@ public:
 				std::get<2>(teams.at(j))--;
 				if (std::get<2>(teams.at(j)) > 0)
 					std::get<1>(teams.at(j)) /= std::get<2>(teams.at(j));
-				else
-					std::get<1>(teams.at(j)) = 0;
+				else teams.erase(teams.begin() + j);
 			}
 		}
 	}
@@ -231,11 +230,10 @@ public:
 		if (participants.empty()) ui->printMinecraft("&1Nothing to delete ");
 		else {
 			showParticipants();
-
 			int id;
 			while (true) {
-				id = ui->input<int>("Participant to &1remove &0id");
-				if (id > 0 && id < participants.size()) break;
+				 id = ui->input<int>("Participant to &1remove &0id");
+				 if (id >= 0 && id < participants.size()) break;
 			}
 			removeTeamMember(id);
 			participants.erase(participants.begin() + id);
@@ -271,7 +269,7 @@ public:
 		return 1;
 	}
 	int specialTask() {
-		// Имя команды/Возраст общий/Кол-во участников
+		// пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 		std::vector<std::tuple<std::string, int, int>> teams = this->teams;
 
 
@@ -517,7 +515,7 @@ private:
 	std::string fileName;
 	std::vector<Participant*> participants;
 	UI<Database>* ui;
-	// Содержит информацию о командах в порядке Имя команды/Возраст общий/Кол-во участников
+	// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ/пїЅпїЅпїЅ-пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 	std::vector<std::tuple<std::string, int, int>> teams;
 };
 

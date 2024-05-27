@@ -15,7 +15,7 @@ struct Participant
 		this->age = age;
 	}
 	std::string print() {
-		std::string output = "playerID: " + std::to_string(playerID) + "  " + FIO + "\nCountry: " + country + "\nTeam name: " + teamName + "\nWeight: " + std::to_string(weight) + " kg  \nHeight: " + std::to_string(height) + " sm \nAge: " + std::to_string(age) + " years\n";
+		std::string output = "playerID: " + std::to_string(playerID) + " \nFIO:" + FIO + "\nCountry: " + country + "\nTeam name: " + teamName + "\nWeight: " + std::to_string(weight) + " kg  \nHeight: " + std::to_string(height) + " sm \nAge: " + std::to_string(age) + " years\n\n";
 		return output;
 	}
 
