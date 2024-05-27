@@ -1,21 +1,21 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "A:\\Projects\\Kursuck\\",
+  "WorkspaceRootPath": "F:\\Projects\\Games\\Kursuck\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|A:\\Projects\\Kursuck\\Database.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|F:\\Projects\\Games\\Kursuck\\Database.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|solutionrelative:Database.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|A:\\Projects\\Kursuck\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|F:\\Projects\\Games\\Kursuck\\main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|solutionrelative:main.cpp||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|A:\\Projects\\Kursuck\\Participant.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|F:\\Projects\\Games\\Kursuck\\Participant.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|solutionrelative:Participant.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|A:\\Projects\\Kursuck\\Choice.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
+      "AbsoluteMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|F:\\Projects\\Games\\Kursuck\\Choice.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}",
       "RelativeMoniker": "D:0:0:{341A74EE-5E07-4E7B-8EA1-2774E20593CB}|Kursuck.vcxproj|solutionrelative:Choice.h||{D0E1A5C6-B359-4E41-9B60-3365922C2A22}"
     }
   ],
@@ -32,11 +32,11 @@
               "$type": "Document",
               "DocumentIndex": 3,
               "Title": "Choice.h",
-              "DocumentMoniker": "A:\\Projects\\Kursuck\\Choice.h",
+              "DocumentMoniker": "F:\\Projects\\Games\\Kursuck\\Choice.h",
               "RelativeDocumentMoniker": "Choice.h",
-              "ToolTip": "A:\\Projects\\Kursuck\\Choice.h",
+              "ToolTip": "F:\\Projects\\Games\\Kursuck\\Choice.h",
               "RelativeToolTip": "Choice.h",
-              "ViewState": "AQIAAL4AAAAAAAAAAAAcwF4AAAAAAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABkAAAADAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-03-04T21:56:49.161Z"
             },
@@ -44,11 +44,11 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Database.h",
-              "DocumentMoniker": "A:\\Projects\\Kursuck\\Database.h",
+              "DocumentMoniker": "F:\\Projects\\Games\\Kursuck\\Database.h",
               "RelativeDocumentMoniker": "Database.h",
-              "ToolTip": "A:\\Projects\\Kursuck\\Database.h",
+              "ToolTip": "F:\\Projects\\Games\\Kursuck\\Database.h",
               "RelativeToolTip": "Database.h",
-              "ViewState": "AQIAABsAAAAAAAAAAAAAAAYAAAAQAAAA",
+              "ViewState": "AQIAAM4AAAAAAAAAAAAAAEoBAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-03-04T21:56:48.25Z",
               "EditorCaption": ""
@@ -57,11 +57,11 @@
               "$type": "Document",
               "DocumentIndex": 2,
               "Title": "Participant.h",
-              "DocumentMoniker": "A:\\Projects\\Kursuck\\Participant.h",
+              "DocumentMoniker": "F:\\Projects\\Games\\Kursuck\\Participant.h",
               "RelativeDocumentMoniker": "Participant.h",
-              "ToolTip": "A:\\Projects\\Kursuck\\Participant.h",
+              "ToolTip": "F:\\Projects\\Games\\Kursuck\\Participant.h",
               "RelativeToolTip": "Participant.h",
-              "ViewState": "AQIAABsAAAAAAAAAAAAAACEAAABNAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000680|",
               "WhenOpened": "2024-03-04T21:56:49.149Z"
             },
@@ -69,11 +69,11 @@
               "$type": "Document",
               "DocumentIndex": 1,
               "Title": "main.cpp",
-              "DocumentMoniker": "A:\\Projects\\Kursuck\\main.cpp",
+              "DocumentMoniker": "F:\\Projects\\Games\\Kursuck\\main.cpp",
               "RelativeDocumentMoniker": "main.cpp",
-              "ToolTip": "A:\\Projects\\Kursuck\\main.cpp",
+              "ToolTip": "F:\\Projects\\Games\\Kursuck\\main.cpp",
               "RelativeToolTip": "main.cpp",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAAsAAAAsAAAA",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAoAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000677|",
               "WhenOpened": "2024-03-04T21:56:49.162Z"
             }

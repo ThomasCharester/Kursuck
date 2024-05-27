@@ -89,7 +89,9 @@ public:
 			if (std::string(*participants.at(i)) == std::get<0>(teams.at(j))) {
 				std::get<1>(teams.at(j)) = (std::get<1>(teams.at(j)) * std::get<2>(teams.at(j)) - int(*participants.at(i)));
 				std::get<2>(teams.at(j))--;
-				std::get<1>(teams.at(j)) /= std::get<2>(teams.at(j));
+				if (std::get<2>(teams.at(j)) > 0)
+					std::get<1>(teams.at(j)) /= std::get<2>(teams.at(j));
+				else teams.erase(teams.begin() + j);
 			}
 		}
 	}
@@ -98,7 +100,11 @@ public:
 		if (participants.empty()) ui->printMinecraft("&1Nothing to delete ");
 		else {
 			showParticipants();
-			int id = ui->input<int>("Participant to &1remove &0id");
+			int id;
+			while (true) {
+				 id = ui->input<int>("Participant to &1remove &0id");
+				 if (id >= 0 && id < participants.size()) break;
+			}
 			removeTeamMember(id);
 			participants.erase(participants.begin() + id);
 		}
@@ -126,7 +132,7 @@ public:
 		if (participants.empty()) ui->printMinecraft("&1Nothing to output ");
 		else {
 			for (int i = 0; i < participants.size(); i++) {
-				ui->print<std::string>(participants.at(i)->print());
+				ui->print<std::string>("ID: " +std::to_string(i)+ '\n' + participants.at(i)->print());
 			}
 		}
 		ui->pressAnyButton();
@@ -304,7 +310,7 @@ public:
 	void enterFileName(std::string& fileName) {
 		system("cls");
 		fileName = ui->input<std::string>("Text file name without .format, then press enter");
-		fileName += ".ednach";
+		fileName += ".txt";
 	}
 	int writeFile() {
 		std::ofstream file;

@@ -156,7 +156,6 @@ public:
 
 		std::cout << '\n';
 	}
-
 	template <typename T1>
 	void print(T1 data, bool newLine = true) {
 		if (newLine) std::cout << '\n';

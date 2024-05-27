@@ -1,17 +1,17 @@
 ﻿  main.cpp
-A:\Projects\Kursuck\Database.h(69,37): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+F:\Projects\Games\Kursuck\Database.h(69,37): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "main.cpp")
   
-A:\Projects\Kursuck\Database.h(145,16): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+F:\Projects\Games\Kursuck\Database.h(151,16): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "main.cpp")
   
-A:\Projects\Kursuck\Database.h(178,36): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+F:\Projects\Games\Kursuck\Database.h(184,36): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "main.cpp")
   
-A:\Projects\Kursuck\Database.h(204,35): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+F:\Projects\Games\Kursuck\Database.h(210,35): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "main.cpp")
   
-A:\Projects\Kursuck\Database.h(356,39): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+F:\Projects\Games\Kursuck\Database.h(362,39): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "main.cpp")
   
-  Kursuck.vcxproj -> A:\Projects\Kursuck\x64\Debug\Kursuck.exe
+  Kursuck.vcxproj -> F:\Projects\Games\Kursuck\x64\Debug\Kursuck.exe
