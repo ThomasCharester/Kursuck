@@ -31,12 +31,13 @@ public:
 		return ch;
 	}
 	int editDatabase() {
-		UI<Database>::Choice taskChoices[2]{
+		UI<Database>::Choice taskChoices[3]{
 			UI<Database>::Choice(this, &Database::addParticipant, "Add participant"),
-			UI<Database>::Choice(this, &Database::removeParticipant, "Remove participant")
+			UI<Database>::Choice(this, &Database::removeParticipant, "Remove participant"),
+			UI<Database>::Choice(this, &Database::editParticipant, "Edit participant")
 		};
 
-		return ui->choose(taskChoices, 2, "Choose option", false);
+		return ui->choose(taskChoices, 3, "Choose option", false);
 	}
 	int search() {
 		UI<Database>::Choice taskChoices[2]{
@@ -54,6 +55,135 @@ public:
 		};
 
 		return ui->choose(taskChoices, 3, "File", false);
+	}
+	int editParticipant() {
+		if (participants.empty()) ui->printMinecraft("&1Nothing to edit ");
+		else {
+			UI<Database>::Choice taskChoices[7]{
+				UI<Database>::Choice(this,&Database::editFIO,"FIO"),
+				UI<Database>::Choice(this,&Database::editPlayerID,"Player ID"),
+				UI<Database>::Choice(this,&Database::editTeamName,"Team name"),
+				UI<Database>::Choice(this,&Database::editCountry,"Country"),
+				UI<Database>::Choice(this,&Database::editAge,"Age"),
+				UI<Database>::Choice(this,&Database::editWeight,"Weight"),
+				UI<Database>::Choice(this,&Database::editHeight,"Height")
+			};
+
+			return ui->choose(taskChoices, 7, "Choose parameter", false);
+		}
+		return 1;
+	}
+	int editFIO() {
+		showParticipants();
+
+		int id;
+
+		while (true) {
+			id = ui->input<int>("Participant to &1edit &0id");
+			if (id > 0 && id < participants.size()) break;
+		}
+
+		std::string FIO = ui->input<std::string>("Participant &2FIO");
+
+		participants.at(id)->FIO = FIO;
+
+		return 1;
+	}
+	int editPlayerID() {
+		showParticipants();
+
+		int id;
+
+		while (true) {
+			id = ui->input<int>("Participant to &1edit &0id");
+			if (id > 0 && id < participants.size()) break;
+		}
+
+		int playerID = ui->input<int>("Participant &2player ID");
+
+		participants.at(id)->playerID = playerID;
+
+		return 1;
+	}
+	int editTeamName() {
+		showParticipants();
+
+		int id;
+
+		while (true) {
+			id = ui->input<int>("Participant to &1edit &0id");
+			if (id > 0 && id < participants.size()) break;
+		}
+
+		std::string teamName = ui->input<std::string>("Participant &2team name");
+
+		participants.at(id)->teamName = teamName;
+
+		return 1;
+	}
+	int editCountry() {
+		showParticipants();
+
+		int id;
+
+		while (true) {
+			id = ui->input<int>("Participant to &1edit &0id");
+			if (id > 0 && id < participants.size()) break;
+		}
+
+		std::string country = ui->input<std::string>("Participant &2country");
+
+		participants.at(id)->country = country;
+
+		return 1;
+	}
+	int editAge() {
+		showParticipants();
+
+		int id;
+
+		while (true) {
+			id = ui->input<int>("Participant to &1edit &0id");
+			if (id > 0 && id < participants.size()) break;
+		}
+
+		int age = ui->input<int>("Participant &2age");
+
+		participants.at(id)->age = age;
+
+		return 1;
+	}
+	int editWeight() {
+		showParticipants();
+
+		int id;
+
+		while (true) {
+			id = ui->input<int>("Participant to &1edit &0id");
+			if (id > 0 && id < participants.size()) break;
+		}
+
+		float weight = ui->input<float>("Participant &2weight");
+
+		participants.at(id)->weight = weight;
+
+		return 1;
+	}
+	int editHeight() {
+		showParticipants();
+
+		int id;
+
+		while (true) {
+			id = ui->input<int>("Participant to &1edit &0id");
+			if (id > 0 && id < participants.size()) break;
+		}
+
+		float height = ui->input<float>("Participant &2height");
+
+		participants.at(id)->height = height;
+
+		return 1;
 	}
 	int addParticipant() {
 		std::string FIO = ui->input<std::string>("Participant &2FIO");
@@ -89,7 +219,10 @@ public:
 			if (std::string(*participants.at(i)) == std::get<0>(teams.at(j))) {
 				std::get<1>(teams.at(j)) = (std::get<1>(teams.at(j)) * std::get<2>(teams.at(j)) - int(*participants.at(i)));
 				std::get<2>(teams.at(j))--;
-				std::get<1>(teams.at(j)) /= std::get<2>(teams.at(j));
+				if (std::get<2>(teams.at(j)) > 0)
+					std::get<1>(teams.at(j)) /= std::get<2>(teams.at(j));
+				else
+					std::get<1>(teams.at(j)) = 0;
 			}
 		}
 	}
@@ -98,7 +231,12 @@ public:
 		if (participants.empty()) ui->printMinecraft("&1Nothing to delete ");
 		else {
 			showParticipants();
-			int id = ui->input<int>("Participant to &1remove &0id");
+
+			int id;
+			while (true) {
+				id = ui->input<int>("Participant to &1remove &0id");
+				if (id > 0 && id < participants.size()) break;
+			}
 			removeTeamMember(id);
 			participants.erase(participants.begin() + id);
 		}
@@ -126,7 +264,7 @@ public:
 		if (participants.empty()) ui->printMinecraft("&1Nothing to output ");
 		else {
 			for (int i = 0; i < participants.size(); i++) {
-				ui->print<std::string>(participants.at(i)->print());
+				ui->print<std::string>("ID: " + std::to_string(i) + '\n' + participants.at(i)->print());
 			}
 		}
 		ui->pressAnyButton();
@@ -135,6 +273,18 @@ public:
 	int specialTask() {
 		// Имя команды/Возраст общий/Кол-во участников
 		std::vector<std::tuple<std::string, int, int>> teams = this->teams;
+
+
+		for (int step = 0; step < teams.size(); ++step) {
+			for (int i = 0; i < teams.size() - step - 1; i++) {
+				if ((std::get<1>(teams.at(i))) > (std::get<1>(teams.at(i + 1)))) {
+					std::tuple<std::string, int, int> temp = teams[i];
+					teams[i] = teams[i + 1];
+					teams[i + 1] = temp;
+				}
+			}
+		}
+
 
 		for (size_t j = 0; j < teams.size() - 1; j++) {
 			if (std::get<1>(teams.at(j + 1)) > std::get<1>(teams.at(j))) {
@@ -186,7 +336,7 @@ public:
 		{
 			while (*participants[f] < *mid) f++;
 			while (*participants[l] > *mid) l--;
-			if (f <= l) 
+			if (f <= l)
 			{
 				count = participants[f];
 				participants[f] = participants[l];
@@ -304,7 +454,7 @@ public:
 	void enterFileName(std::string& fileName) {
 		system("cls");
 		fileName = ui->input<std::string>("Text file name without .format, then press enter");
-		fileName += ".ednach";
+		fileName += ".txt";
 	}
 	int writeFile() {
 		std::ofstream file;

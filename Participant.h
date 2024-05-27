@@ -5,7 +5,6 @@
 
 struct Participant
 {
-public:
 	Participant(std::string FIO, std::string country, std::string teamName, float weight, float height, int playerID, int age) {
 		this->FIO = FIO;
 		this->country = country;
@@ -16,10 +15,9 @@ public:
 		this->age = age;
 	}
 	std::string print() {
-		std::string output = "ID: " + std::to_string(playerID) + "  " + FIO + "\nCountry: " + country + "\nTeam name: " + teamName + "\nWeight: " + std::to_string(weight) + " kg  \nHeight: " + std::to_string(height) + " sm \nAge: " + std::to_string(age) + " years\n";
+		std::string output = "playerID: " + std::to_string(playerID) + "  " + FIO + "\nCountry: " + country + "\nTeam name: " + teamName + "\nWeight: " + std::to_string(weight) + " kg  \nHeight: " + std::to_string(height) + " sm \nAge: " + std::to_string(age) + " years\n";
 		return output;
 	}
-private:
 
 	std::string FIO;
 	std::string country;
@@ -28,7 +26,6 @@ private:
 	float height;
 	int playerID;
 	int age;
-public:
 
 	inline const bool operator ==(const Participant& m2) { return age == m2.age; }
 	inline const bool operator > (const Participant& m2) { return age > m2.age; }
